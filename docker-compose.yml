@@ -1,0 +1,31 @@
+version: '3'
+services:
+  frontend:
+    build:
+      context: './frontend'
+    ports:
+      - "3000:3000"
+
+  database:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: planerino
+    ports:
+      - "5432:5432"
+
+  backend:
+    build:
+      context: './backend'
+    depends_on:
+      - database
+    environment:
+      DATABASE_URL: ecto://postgres:postgres@database/planerino
+      DATABASE_USER: postgres
+      DATABASE_PASS: postgres
+      DATABASE_NAME: planerino
+      DATABASE_PORT: 5432
+      DATABASE_HOST: database
+    ports:
+      - "4000:4000"
